@@ -5,7 +5,8 @@ Class {
 		'semaphore',
 		'watcher',
 		'semaphoreIndex',
-		'onEvent'
+		'onEvent',
+		'process'
 	],
 	#category : #'GToolkit-Filewatcher'
 }
@@ -29,9 +30,14 @@ FileWatcherEventLoop >> pollEvent [
 
 { #category : #events }
 FileWatcherEventLoop >> startLoop [
-	[ [
+	process := [ [
 	semaphore wait.
 	self pollEvent ] repeat ] fork
+]
+
+{ #category : #events }
+FileWatcherEventLoop >> stopLoop [
+	process terminate
 ]
 
 { #category : #initialization }

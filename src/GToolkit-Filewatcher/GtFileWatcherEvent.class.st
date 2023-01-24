@@ -4,11 +4,35 @@ Class {
 	#category : #'GToolkit-Filewatcher'
 }
 
+{ #category : #'library path' }
+GtFileWatcherEvent class >> ffiLibrary [
+	^ GtFileWatcherLibrary
+]
+
 { #category : #'private - ffi' }
 GtFileWatcherEvent class >> primRelease: aHandle [
 	"Plain pointers must be deleted using delete(), all users must implement a specific method"
 
 	^ self ffiCall: #(void filewatcher_destroy_event #(void * aHandle))
+]
+
+{ #category : #accessing }
+GtFileWatcherEvent >> gtKindFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Kind';
+		priority: 1;
+		object: [ self kind ];
+		view: #gtNameFor:
+]
+
+{ #category : #accessing }
+GtFileWatcherEvent >> gtPathsFor: aView [
+	<gtView>
+	^ aView list
+		title: 'Paths';
+		priority: 2;
+		items: [ self paths ]
 ]
 
 { #category : #accessing }
@@ -48,7 +72,7 @@ GtFileWatcherEvent >> primKind [
 
 { #category : #'private - ffi' }
 GtFileWatcherEvent >> primPathAt: anIndex withString: aBoxerString [
-	self ffiCall: #(void filewatcher_event_path_size(self, BoxerString aBoxerString, int anIndex))
+	self ffiCall: #(void filewatcher_event_path_at(self, GtBoxerString aBoxerString, int anIndex))
 ]
 
 { #category : #'private - ffi' }
