@@ -1,5 +1,5 @@
 Class {
-	#name : #FileWatcherEventLoop,
+	#name : #GtFileWatcherEventLoop,
 	#superclass : #Object,
 	#instVars : [
 		'semaphore',
@@ -12,35 +12,35 @@ Class {
 }
 
 { #category : #initialization }
-FileWatcherEventLoop >> initialize [
+GtFileWatcherEventLoop >> initialize [
 	semaphore := Semaphore new.
 	semaphoreIndex := Smalltalk registerExternalObject: semaphore.
 	watcher := GtFileWatcher withSemaphore: semaphoreIndex.
 ]
 
 { #category : #accessing }
-FileWatcherEventLoop >> onEvent: aBlock [
+GtFileWatcherEventLoop >> onEvent: aBlock [
 	onEvent := aBlock
 ]
 
 { #category : #initialization }
-FileWatcherEventLoop >> pollEvent [
+GtFileWatcherEventLoop >> pollEvent [
 	onEvent cull: watcher poll
 ]
 
 { #category : #events }
-FileWatcherEventLoop >> startLoop [
+GtFileWatcherEventLoop >> startLoop [
 	process := [ [
 	semaphore wait.
 	self pollEvent ] repeat ] fork
 ]
 
 { #category : #events }
-FileWatcherEventLoop >> stopLoop [
+GtFileWatcherEventLoop >> stopLoop [
 	process terminate
 ]
 
 { #category : #initialization }
-FileWatcherEventLoop >> watch: aPath [
+GtFileWatcherEventLoop >> watch: aPath [
 	watcher watch: aPath
 ]
