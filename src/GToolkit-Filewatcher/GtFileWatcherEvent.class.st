@@ -6,7 +6,7 @@ Class {
 
 { #category : #'library path' }
 GtFileWatcherEvent class >> ffiLibrary [
-	^ GtFileWatcherLibrary
+	^ GtFileWatcherLibrary uniqueInstance
 ]
 
 { #category : #'private - ffi' }
@@ -42,9 +42,8 @@ GtFileWatcherEvent >> kind [
 
 { #category : #accessing }
 GtFileWatcherEvent >> pathAt: anIndex [
-	^ GtBoxerString
-		fromString: ''
-		during: [ :aBoxerString | 
+	^ self ffiLibrary
+		getStringFrom: [ :aBoxerString | 
 			self primPathAt: anIndex - 1 withString: aBoxerString.
 			aBoxerString string ]
 ]

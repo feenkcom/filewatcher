@@ -6,7 +6,7 @@ Class {
 
 { #category : #'library path' }
 GtFileWatcher class >> ffiLibrary [
-	^ GtFileWatcherLibrary
+	^ GtFileWatcherLibrary uniqueInstance
 ]
 
 { #category : #'private - ffi' }
@@ -68,5 +68,5 @@ GtFileWatcher >> primWatch: aGtBoxerString [
 GtFileWatcher >> watch: aString [
 	<return: #String>
 
-	GtBoxerString fromString: aString during: [ :aBoxerString | self primWatch: aBoxerString ]
+	self ffiLibrary newString: aString during: [ :aBoxerString | self primWatch: aBoxerString ]
 ]

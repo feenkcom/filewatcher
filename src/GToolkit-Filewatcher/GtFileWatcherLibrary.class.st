@@ -1,6 +1,8 @@
 Class {
 	#name : #GtFileWatcherLibrary,
 	#superclass : #FFILibrary,
+	#traits : 'TGtWithStringBox',
+	#classTraits : 'TGtWithStringBox classTrait',
 	#classInstVars : [
 		'MouseWheelScrollSpeed'
 	],

@@ -6,7 +6,7 @@ Class {
 
 { #category : #'library path' }
 GtFileWatcherEventKind class >> ffiLibrary [
-	^ GtFileWatcherLibrary
+	^ GtFileWatcherLibrary uniqueInstance
 ]
 
 { #category : #'private - ffi' }
