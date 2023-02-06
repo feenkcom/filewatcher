@@ -64,6 +64,15 @@ GtFileWatcherEvent >> paths [
 	^ res
 ]
 
+{ #category : #accessing }
+GtFileWatcherEvent >> pathsDo: aBlock [
+	| size res |
+	size := self pathSize.
+	res := Array new: size.
+	1 to: size do: [ :idx | aBlock value: (self pathAt: idx) ].
+	^ res
+]
+
 { #category : #'private - ffi' }
 GtFileWatcherEvent >> primKind [
 	^ self ffiCall: #(GtFileWatcherEventKind filewatcher_event_kind(self))
