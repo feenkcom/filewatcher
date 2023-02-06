@@ -25,10 +25,10 @@ GtUpdatingFileBrowser >> handleEvent: anEvent [
 
 { #category : #accessing }
 GtUpdatingFileBrowser >> setEventLoop: aString [
-	eventLoop ifNotNil: [eventLoop stopLoop].
-	
+	eventLoop ifNotNil: [ eventLoop stopLoop ].
+
 	eventLoop := GtFileWatcherEventLoop new
-	watch: FileLocator imageDirectory pathString;
-	onEvent: [ :anEvent | self handleEvent: anEvent];
-	startLoop
+			watch: aString;
+			onEvent: [ :anEvent | self handleEvent: anEvent ];
+			startLoop
 ]

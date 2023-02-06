@@ -5,8 +5,8 @@ Class {
 		'semaphore',
 		'watcher',
 		'semaphoreIndex',
-		'onEvent',
-		'process'
+		'process',
+		'subscribers'
 	],
 	#category : #'GToolkit-Filewatcher'
 }
@@ -20,12 +20,14 @@ GtFileWatcherEventLoop >> initialize [
 
 { #category : #accessing }
 GtFileWatcherEventLoop >> onEvent: aBlock [
-	onEvent := aBlock
+	subscribers add: aBlock
 ]
 
 { #category : #initialization }
 GtFileWatcherEventLoop >> pollEvent [
-	onEvent cull: watcher poll
+	| anEvent |
+	anEvent := watcher poll.
+	subscribers do: [ :aSubscriber | aSubscriber cull: anEvent ]
 ]
 
 { #category : #events }
