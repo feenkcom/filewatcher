@@ -15,7 +15,7 @@ GtUpdatingFileBrowser >> finalize [
 { #category : #accessing }
 GtUpdatingFileBrowser >> folder: aString [
 	super folder: aString.
-	self setEventLoop: aString.
+	self setEventLoop: aString pathString
 ]
 
 { #category : #accessing }

@@ -16,6 +16,7 @@ GtFileWatcherEventLoop >> initialize [
 	semaphore := Semaphore new.
 	semaphoreIndex := Smalltalk registerExternalObject: semaphore.
 	watcher := GtFileWatcher withSemaphore: semaphoreIndex.
+	subscribers := OrderedCollection new
 ]
 
 { #category : #accessing }
