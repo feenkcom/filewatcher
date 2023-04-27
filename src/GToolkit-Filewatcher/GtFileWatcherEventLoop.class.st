@@ -6,9 +6,10 @@ Class {
 		'watcher',
 		'semaphoreIndex',
 		'process',
-		'subscribers'
+		'subscribers',
+		'watching'
 	],
-	#category : #'GToolkit-Filewatcher'
+	#category : #'GToolkit-Filewatcher-Core'
 }
 
 { #category : #initialization }
@@ -16,7 +17,13 @@ GtFileWatcherEventLoop >> initialize [
 	semaphore := Semaphore new.
 	semaphoreIndex := Smalltalk registerExternalObject: semaphore.
 	watcher := GtFileWatcher withSemaphore: semaphoreIndex.
-	subscribers := OrderedCollection new
+	subscribers := OrderedCollection new.
+	watching := OrderedCollection new
+]
+
+{ #category : #events }
+GtFileWatcherEventLoop >> isRunning [
+	^ process isNotNil
 ]
 
 { #category : #accessing }
@@ -40,10 +47,23 @@ GtFileWatcherEventLoop >> startLoop [
 
 { #category : #events }
 GtFileWatcherEventLoop >> stopLoop [
-	process terminate
+	process
+		ifNotNil: [ process terminate.
+			process := nil ]
+]
+
+{ #category : #initialization }
+GtFileWatcherEventLoop >> subscribers [
+	^ subscribers
 ]
 
 { #category : #initialization }
 GtFileWatcherEventLoop >> watch: aPath [
-	watcher watch: aPath
+	watcher watch: aPath.
+	watching add: aPath
+]
+
+{ #category : #initialization }
+GtFileWatcherEventLoop >> watchedPaths [
+	^ watching
 ]

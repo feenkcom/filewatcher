@@ -6,7 +6,7 @@ Class {
 	#classInstVars : [
 		'MouseWheelScrollSpeed'
 	],
-	#category : #'GToolkit-Filewatcher'
+	#category : #'GToolkit-Filewatcher-FFI'
 }
 
 { #category : #'library path' }

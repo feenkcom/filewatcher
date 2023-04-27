@@ -1,7 +1,7 @@
 Class {
 	#name : #GtFileWatcher,
 	#superclass : #GtBoxerValueBox,
-	#category : #'GToolkit-Filewatcher'
+	#category : #'GToolkit-Filewatcher-Core'
 }
 
 { #category : #'library path' }
