@@ -12,6 +12,25 @@ Class {
 	#category : #'GToolkit-Filewatcher-Core'
 }
 
+{ #category : #accessing }
+GtFileWatcherEventLoop >> gtStatusFor: aView [
+	<gtView>
+	^ aView columnedList
+		label: 'Status';
+		priority: 1;
+		items: [ self summaryAttributes ];
+		column: #Attribute text: [ :item | item key ];
+		column: #Value text: [ :item | item value ];
+		send: [ :item | item value ];
+		actionUpdateButton;
+		actionButtonIcon: BrGlamorousVectorIcons play
+			tooltip: 'Start'
+			action: [ self startLoop ];
+		actionButtonIcon: BrGlamorousVectorIcons cancel
+			tooltip: 'Stop'
+			action: [ self stopLoop ]
+]
+
 { #category : #initialization }
 GtFileWatcherEventLoop >> initialize [
 	semaphore := Semaphore new.
@@ -40,9 +59,9 @@ GtFileWatcherEventLoop >> pollEvent [
 
 { #category : #events }
 GtFileWatcherEventLoop >> startLoop [
-	process := [ [
-	semaphore wait.
-	self pollEvent ] repeat ] fork
+	process
+		ifNil: [ process := [ [ semaphore wait.
+				self pollEvent ] repeat ] fork ]
 ]
 
 { #category : #events }
@@ -55,6 +74,16 @@ GtFileWatcherEventLoop >> stopLoop [
 { #category : #initialization }
 GtFileWatcherEventLoop >> subscribers [
 	^ subscribers
+]
+
+{ #category : #accessing }
+GtFileWatcherEventLoop >> summaryAttributes [
+	^ {{'Running'.
+			self isRunning}.
+		{'Subscribers'.
+			self subscribers}.
+		{'Watched Paths'.
+			self watchedPaths}}
 ]
 
 { #category : #initialization }
