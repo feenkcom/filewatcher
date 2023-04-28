@@ -13,6 +13,21 @@ Class {
 }
 
 { #category : #accessing }
+GtFileWatcherEventLoop >> announcer [
+	| announcer |
+	announcer := Announcer new.
+	self onEvent: [:anEvent | announcer announce: (GtFileWatcherFileAnnouncement from: anEvent) ].
+	^ announcer
+]
+
+{ #category : #accessing }
+GtFileWatcherEventLoop >> finalize [
+	self stopLoop.
+	
+	super finalize
+]
+
+{ #category : #accessing }
 GtFileWatcherEventLoop >> gtStatusFor: aView [
 	<gtView>
 	^ aView columnedList
