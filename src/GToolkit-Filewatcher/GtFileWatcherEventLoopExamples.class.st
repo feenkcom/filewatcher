@@ -12,6 +12,8 @@ Class {
 GtFileWatcherEventLoopExamples >> cleanUp [
 	toCleanup stopLoop.
 	toCleanup := nil.
+	(Smalltalk imageDirectory / 'GtFileWatcherEventLoopExamples.txt')
+		ensureDelete
 ]
 
 { #category : #accessing }
@@ -20,7 +22,7 @@ GtFileWatcherEventLoopExamples >> eventLoopWithEvent [
 	| eventLoop |
 	eventLoop := self startedEventLoop.
 	
-	(Smalltalk imageDirectory / 't.txt') ensureCreateFile.
+	(Smalltalk imageDirectory / 'GtFileWatcherEventLoopExamples.txt') ensureCreateFile.
 	
 	1 second wait.
 	
@@ -39,7 +41,7 @@ GtFileWatcherEventLoopExamples >> eventLoopWithSubscriber [
 
 	eventLoop
 		onEvent: [ :anEvent | 
-			self assert: anEvent isCreate.
+			self assert: anEvent kind isCreate.
 			events add: anEvent ].
 
 	self assert: eventLoop subscribers size equals: 1.

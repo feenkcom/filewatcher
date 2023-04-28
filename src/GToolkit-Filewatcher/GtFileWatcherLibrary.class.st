@@ -23,6 +23,11 @@ GtFileWatcherLibrary class >> startUp: isANewSession [
 ]
 
 { #category : #'api - library' }
+GtFileWatcherLibrary >> androidLibraryName [
+	^ 'libFilewatcher.so'
+]
+
+{ #category : #'api - library' }
 GtFileWatcherLibrary >> detectLibrary: aFileName [
 	"Pharo9 introduced a platform specific FFILibraryFinder which should be used instead of this custom implementation"
 
@@ -57,10 +62,7 @@ GtFileWatcherLibrary >> initEnvLogger [
 
 { #category : #'api - library' }
 GtFileWatcherLibrary >> macLibraryName [
-	^ self class environment
-		at: #FFIMacLibraryFinder
-		ifPresent: [ :aLibraryFinder | aLibraryFinder findLibrary: 'libfilewatcher.dylib' ]
-		ifAbsent: [ self detectLibrary: 'libfilewatcher.dylib' ]
+	^ FFIMacLibraryFinder findLibrary: 'libFilewatcher.dylib'
 ]
 
 { #category : #'private - ffi' }
@@ -75,24 +77,15 @@ GtFileWatcherLibrary >> primTest [
 
 { #category : #'api - library' }
 GtFileWatcherLibrary >> unix32LibraryName [
-	^ self class environment
-		at: #FFIUnix32LibraryFinder
-		ifPresent: [ :aLibraryFinder | aLibraryFinder findLibrary: 'libfilewatcher.so' ]
-		ifAbsent: [ self detectLibrary: 'libfilewatcher.so' ]
+	^ FFIUnix32LibraryFinder findLibrary: 'libFilewatcher.so'
 ]
 
 { #category : #'api - library' }
 GtFileWatcherLibrary >> unix64LibraryName [
-	^ self class environment
-		at: #FFIUnix64LibraryFinder
-		ifPresent: [ :aLibraryFinder | aLibraryFinder findLibrary: 'libfilewatcher.so' ]
-		ifAbsent: [ self detectLibrary: 'libfilewatcher.so' ]
+	^ FFIUnix64LibraryFinder findLibrary: 'libFilewatcher.so'
 ]
 
 { #category : #'api - library' }
 GtFileWatcherLibrary >> win32LibraryName [
-	^ self class environment
-		at: #FFIWindowsLibraryFinder
-		ifPresent: [ :aLibraryFinder | aLibraryFinder findAnyLibrary: #('filewatcher.dll' 'libfilewatcher.dll') ]
-		ifAbsent: [ self detectLibrary: 'libfilewatcher.dll' ]
+	^ FFIWindowsLibraryFinder findLibrary: 'Filewatcher.dll'
 ]

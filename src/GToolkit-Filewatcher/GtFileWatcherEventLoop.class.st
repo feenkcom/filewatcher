@@ -16,7 +16,7 @@ Class {
 GtFileWatcherEventLoop >> gtStatusFor: aView [
 	<gtView>
 	^ aView columnedList
-		label: 'Status';
+		title: 'Status';
 		priority: 1;
 		items: [ self summaryAttributes ];
 		column: #Attribute text: [ :item | item key ];
@@ -78,17 +78,14 @@ GtFileWatcherEventLoop >> subscribers [
 
 { #category : #accessing }
 GtFileWatcherEventLoop >> summaryAttributes [
-	^ {{'Running'.
-			self isRunning}.
-		{'Subscribers'.
-			self subscribers}.
-		{'Watched Paths'.
-			self watchedPaths}}
+	^ {'Running' -> self isRunning.
+		'Subscribers' -> self subscribers.
+		'Watched Paths' -> self watchedPaths}
 ]
 
 { #category : #initialization }
 GtFileWatcherEventLoop >> watch: aPath [
-	watcher watch: aPath.
+	watcher watch: aPath pathString.
 	watching add: aPath
 ]
 
