@@ -9,7 +9,7 @@ It comes bundled with [Glamorous Toolkit](https://gtoolkit.com).
 ```smalltalk
 Metacello new
    baseline: 'Filewatcher';
-   repository: 'github://feenkcom/filewatcher/src';
+   repository: 'github://feenkcom/filewatcher:main/src';
    load
 ```
 
