@@ -9,11 +9,43 @@ Class {
 }
 
 { #category : #accessing }
+GtFileWatcherEventLoopExamples >> announcerWithEvent [
+	<gtExample>
+	| announcer announcerEvents |
+	announcer := self eventLoopAnnouncer.
+	announcerEvents := OrderedCollection new.
+	
+	announcer when: GtFileWatcherFileAnnouncement do: [:anEvent | announcerEvents add: anEvent].
+	
+	(Smalltalk imageDirectory / 'GtFileWatcherEventLoopExamples.txt') ensureCreateFile.
+	
+	1 second wait.
+	
+	self assert: events size equals: 1.
+	self assert: announcerEvents size equals: 1.
+	self assert: announcerEvents first paths first equals: (Smalltalk imageDirectory / 'GtFileWatcherEventLoopExamples.txt') pathString.
+	
+	^ announcer
+]
+
+{ #category : #accessing }
 GtFileWatcherEventLoopExamples >> cleanUp [
 	toCleanup stopLoop.
 	toCleanup := nil.
 	(Smalltalk imageDirectory / 'GtFileWatcherEventLoopExamples.txt')
 		ensureDelete
+]
+
+{ #category : #accessing }
+GtFileWatcherEventLoopExamples >> eventLoopAnnouncer [
+	<gtExample>
+	| eventLoop announcer |
+	eventLoop := self startedEventLoop.
+	announcer := eventLoop announcer.
+	
+	self assert: announcer hasSubscriptions not.
+	
+	^ announcer
 ]
 
 { #category : #accessing }
