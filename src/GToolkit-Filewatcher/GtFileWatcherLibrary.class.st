@@ -1,11 +1,8 @@
 Class {
 	#name : #GtFileWatcherLibrary,
 	#superclass : #FFILibrary,
-	#traits : 'TGtWithStringBox',
-	#classTraits : 'TGtWithStringBox classTrait',
-	#classInstVars : [
-		'MouseWheelScrollSpeed'
-	],
+	#traits : 'TGtWithStringBox + TGtWithPhlowRust',
+	#classTraits : 'TGtWithStringBox classTrait + TGtWithPhlowRust classTrait',
 	#category : #'GToolkit-Filewatcher-FFI'
 }
 
