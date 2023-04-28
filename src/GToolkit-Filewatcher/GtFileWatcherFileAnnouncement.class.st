@@ -28,3 +28,8 @@ GtFileWatcherFileAnnouncement class >> from: anEvent [
 GtFileWatcherFileAnnouncement >> event: anEvent [
 	paths := anEvent paths
 ]
+
+{ #category : #accessing }
+GtFileWatcherFileAnnouncement >> paths [
+	^ paths
+]
