@@ -23,7 +23,7 @@ GtFileWatcherEventLoop class >> startUp: resuming [
 
 	resuming ifFalse: [ ^ self ].
 
-	self allInstancesDo: [ :eachInstance | eachInstance resumeOnStartUp ]
+	self allInstancesDo: [ :eachInstance | eachInstance resumeOnStartup ]
 ]
 
 { #category : #accessing }
