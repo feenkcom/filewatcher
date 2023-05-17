@@ -13,6 +13,20 @@ Class {
 }
 
 { #category : #accessing }
+GtFileWatcherEventLoop class >> initialize [
+
+	SessionManager default registerSystemClassNamed: self name
+]
+
+{ #category : #'system startup' }
+GtFileWatcherEventLoop class >> startUp: resuming [
+
+	resuming ifFalse: [ ^ self ].
+
+	self allInstancesDo: [ :eachInstance | eachInstance resumeOnStartUp ]
+]
+
+{ #category : #accessing }
 GtFileWatcherEventLoop >> announcer [
 	| announcer |
 	announcer := Announcer new.
@@ -70,6 +84,15 @@ GtFileWatcherEventLoop >> pollEvent [
 	| anEvent |
 	anEvent := watcher poll.
 	subscribers do: [ :aSubscriber | aSubscriber cull: anEvent ]
+]
+
+{ #category : #accessing }
+GtFileWatcherEventLoop >> resumeOnStartup [
+	semaphore := Semaphore new.
+	semaphoreIndex := Smalltalk registerExternalObject: semaphore.
+	watcher := GtFileWatcher withSemaphore: semaphoreIndex.
+
+	process ifNotNil: [ self stopLoop startLoop ]
 ]
 
 { #category : #events }
