@@ -13,6 +13,12 @@ Class {
 }
 
 { #category : #accessing }
+GtFileWatcherEventLoop class >> eventLoopFor: sema sending: message [
+	^ [ [ sema wait.
+	message value ] repeat ]
+]
+
+{ #category : #accessing }
 GtFileWatcherEventLoop class >> initialize [
 
 	SessionManager default registerSystemClassNamed: self name
@@ -28,10 +34,7 @@ GtFileWatcherEventLoop class >> startUp: resuming [
 
 { #category : #accessing }
 GtFileWatcherEventLoop >> announcer [
-	| announcer |
-	announcer := Announcer new.
-	self onEvent: [:anEvent | announcer announce: (GtFileWatcherFileAnnouncement from: anEvent) ].
-	^ announcer
+	^ GtFileWatcherAnnouncer new eventLoop: self.
 ]
 
 { #category : #accessing }
@@ -98,8 +101,9 @@ GtFileWatcherEventLoop >> resumeOnStartup [
 { #category : #events }
 GtFileWatcherEventLoop >> startLoop [
 	process
-		ifNil: [ process := [ [ semaphore wait.
-				self pollEvent ] repeat ] fork ]
+		ifNil: [ process := (self class
+					eventLoopFor: semaphore
+					sending: (WeakMessageSend receiver: self selector: #pollEvent)) fork ]
 ]
 
 { #category : #events }
