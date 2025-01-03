@@ -51,7 +51,10 @@ GtFileWatcher class >> withSemaphore: aSemaphoreIndex [
 
 { #category : #'private - ffi' }
 GtFileWatcher >> poll [
-	^ self primPoll
+	| value |
+	value := self primPoll.
+	"the value can be null if this section of objects is being garbage collected"
+	^ value isNull ifTrue: [ nil ] ifFalse: [ value ]
 ]
 
 { #category : #'private - ffi' }

@@ -86,7 +86,10 @@ GtFileWatcherEventLoop >> onEvent: aBlock [
 GtFileWatcherEventLoop >> pollEvent [
 	| anEvent |
 	anEvent := watcher poll.
-	subscribers do: [ :aSubscriber | aSubscriber cull: anEvent ]
+
+	"anEvent can be nil when the watcher is being garbage collected"
+	anEvent
+		ifNotNil: [ subscribers do: [ :aSubscriber | aSubscriber cull: anEvent ] ]
 ]
 
 { #category : #accessing }
