@@ -37,6 +37,15 @@ GtFileWatcherEventLoop >> announcer [
 	^ GtFileWatcherAnnouncer new eventLoop: self.
 ]
 
+{ #category : #initialization }
+GtFileWatcherEventLoop >> assessWatchedFiles [
+	watching
+		select: [ :aPath | aPath exists not ]
+		thenDo: [ :aPath | 
+			watching remove: aPath.
+			watcher unwatch: aPath ]
+]
+
 { #category : #accessing }
 GtFileWatcherEventLoop >> finalize [
 	self stopLoop.
@@ -85,8 +94,9 @@ GtFileWatcherEventLoop >> onEvent: aBlock [
 { #category : #initialization }
 GtFileWatcherEventLoop >> pollEvent [
 	| anEvent |
+	self assessWatchedFiles.
 	anEvent := watcher poll.
-
+	
 	"anEvent can be nil when the watcher is being garbage collected"
 	anEvent
 		ifNotNil: [ subscribers do: [ :aSubscriber | aSubscriber cull: anEvent ] ]
