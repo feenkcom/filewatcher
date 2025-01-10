@@ -63,8 +63,20 @@ GtFileWatcher >> primPoll [
 ]
 
 { #category : #'private - ffi' }
+GtFileWatcher >> primUnwatch: aGtBoxerString [
+	^ self ffiCall: #(void filewatcher_watcher_unwatch(GtFileWatcher self, GtBoxerString aGtBoxerString))
+]
+
+{ #category : #'private - ffi' }
 GtFileWatcher >> primWatch: aGtBoxerString [
 	^ self ffiCall: #(void filewatcher_watcher_watch(GtFileWatcher self, GtBoxerString aGtBoxerString))
+]
+
+{ #category : #'private - ffi' }
+GtFileWatcher >> unwatch: aString [
+	<return: #String>
+
+	self ffiLibrary newString: aString during: [ :aBoxerString | self primUnwatch: aBoxerString ]
 ]
 
 { #category : #'private - ffi' }
