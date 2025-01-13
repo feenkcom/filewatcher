@@ -43,7 +43,7 @@ GtFileWatcherEventLoop >> assessWatchedFiles [
 		select: [ :aPath | aPath exists not ]
 		thenDo: [ :aPath | 
 			watching remove: aPath.
-			watcher unwatch: aPath ]
+			watcher unwatch: aPath pathString ]
 ]
 
 { #category : #accessing }
