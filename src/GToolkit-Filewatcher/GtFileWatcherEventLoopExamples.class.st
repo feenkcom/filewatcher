@@ -72,9 +72,9 @@ GtFileWatcherEventLoopExamples >> eventLoopWithSubscriber [
 	events := OrderedCollection new.
 
 	eventLoop
-		onEvent: [ :anEvent | 
-			self assert: anEvent kind isCreate.
-			events add: anEvent ].
+		onEvent: [ :anEvent |
+			"we get other event kinds here, so we filter"
+			anEvent kind isCreate ifTrue: [ events add: anEvent ] ].
 
 	self assert: eventLoop subscribers size equals: 1.
 
