@@ -33,7 +33,8 @@ GtFileWatcherEventLoopExamples >> cleanUp [
 	toCleanup stopLoop.
 	toCleanup := nil.
 	(Smalltalk imageDirectory / 'GtFileWatcherEventLoopExamples.txt')
-		ensureDelete
+		ensureDelete.
+	events := OrderedCollection new
 ]
 
 { #category : #accessing }
