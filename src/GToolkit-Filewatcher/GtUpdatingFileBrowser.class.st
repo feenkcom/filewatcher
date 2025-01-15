@@ -27,8 +27,10 @@ GtUpdatingFileBrowser >> handleEvent: anEvent [
 GtUpdatingFileBrowser >> setEventLoop: aString [
 	eventLoop ifNotNil: [ eventLoop stopLoop ].
 
-	eventLoop := GtFileWatcherEventLoop new
-			watch: aString;
-			onEvent: [ :anEvent | self handleEvent: anEvent ];
-			startLoop
+	eventLoop := GtFileWatcherEventLoop new watch: aString.
+	eventLoop
+		when: GtFileWatcherChangeAnnouncement
+		send: #handleEvent:
+		to: self.
+	eventLoop startLoop
 ]

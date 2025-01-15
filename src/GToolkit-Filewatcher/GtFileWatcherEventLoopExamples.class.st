@@ -16,7 +16,7 @@ GtFileWatcherEventLoopExamples >> announcerWithEvent [
 	announcerEvents := OrderedCollection new.
 
 	announcer
-		when: GtFileWatcherFileAnnouncement
+		when: GtFileWatcherCreationAnnouncement
 		do: [  :anEvent |
 			"we get other event kinds here, so we filter"
 			anEvent isChange ifTrue: [ announcerEvents add: anEvent ] ].
@@ -51,7 +51,7 @@ GtFileWatcherEventLoopExamples >> eventLoopAnnouncer [
 	eventLoop := self startedEventLoop.
 	announcer := eventLoop announcer.
 	
-	self assert: announcer hasSubscriptions not.
+	self assert: announcer hasSubscriptions.
 	
 	^ announcer
 ]
@@ -79,10 +79,9 @@ GtFileWatcherEventLoopExamples >> eventLoopWithSubscriber [
 
 	events := OrderedCollection new.
 
-	eventLoop
-		onEvent: [ :anEvent |
-			"we get other event kinds here, so we filter"
-			anEvent kind isCreate ifTrue: [ events add: anEvent ] ].
+	eventLoop announcer
+		when: GtFileWatcherCreationAnnouncement
+		do: [ :anEvent | events add: anEvent ].
 
 	self assert: eventLoop subscribers size equals: 1.
 

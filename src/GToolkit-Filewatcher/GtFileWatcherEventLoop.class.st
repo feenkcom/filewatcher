@@ -24,8 +24,8 @@ Class {
 		'watcher',
 		'semaphoreIndex',
 		'process',
-		'subscribers',
-		'watching'
+		'watching',
+		'announcer'
 	],
 	#category : #'GToolkit-Filewatcher-Core'
 }
@@ -52,7 +52,7 @@ GtFileWatcherEventLoop class >> startUp: resuming [
 
 { #category : #accessing }
 GtFileWatcherEventLoop >> announcer [
-	^ GtFileWatcherAnnouncer new eventLoop: self.
+	^ announcer ifNil: [ announcer := GtFileWatcherAnnouncer new ]
 ]
 
 { #category : #initialization }
@@ -95,18 +95,12 @@ GtFileWatcherEventLoop >> initialize [
 	semaphore := Semaphore new.
 	semaphoreIndex := Smalltalk registerExternalObject: semaphore.
 	watcher := GtFileWatcher withSemaphore: semaphoreIndex.
-	subscribers := OrderedCollection new.
 	watching := OrderedCollection new
 ]
 
 { #category : #events }
 GtFileWatcherEventLoop >> isRunning [
 	^ process isNotNil
-]
-
-{ #category : #accessing }
-GtFileWatcherEventLoop >> onEvent: aBlock [
-	subscribers add: aBlock
 ]
 
 { #category : #initialization }
@@ -117,7 +111,7 @@ GtFileWatcherEventLoop >> pollEvent [
 	
 	"anEvent can be nil when the watcher is being garbage collected"
 	anEvent
-		ifNotNil: [ subscribers do: [ :aSubscriber | aSubscriber cull: anEvent ] ]
+		ifNotNil: [ announcer announce: (GtFileWatcherFileAnnouncement from: anEvent) ]
 ]
 
 { #category : #accessing }
@@ -146,7 +140,7 @@ GtFileWatcherEventLoop >> stopLoop [
 
 { #category : #initialization }
 GtFileWatcherEventLoop >> subscribers [
-	^ subscribers
+	^ self announcer subscriptions subscriptions
 ]
 
 { #category : #accessing }
