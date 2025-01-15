@@ -29,6 +29,11 @@ GtFileWatcherFileAnnouncement >> event: anEvent [
 	paths := anEvent paths
 ]
 
+{ #category : #'as yet unclassified' }
+GtFileWatcherFileAnnouncement >> isChange [
+	^ false
+]
+
 { #category : #accessing }
 GtFileWatcherFileAnnouncement >> paths [
 	^ paths

@@ -1,3 +1,21 @@
+"
+Allows to watch files and directories for access, creation, modification, and deletion.
+
+
+
+```
+eventLoop := GtFileWatcherEventLoop new
+	watch: FileLocator imageDirectory;
+	startLoop.
+eventLoop announcer
+	when: GtFileWatcherFileAnnouncement
+	do: [  :anEvent | anEvent inspect ]
+```
+
+A few notes:
+- Different systems behave differently, especially for access events. On some Linux systems, for instance, access events will be generated for all directories contained by the watched directory when the event loop is started. On MacOS, this seems not to be the case.
+- Creating file events in the event handler leads to infinite loops. If the watched path contains `PharoDebug.log`, for instance, and the event handler leads to a logged exception, an infinite cycle of debug file modification and the triggered error occurs.
+"
 Class {
 	#name : #GtFileWatcherEventLoop,
 	#superclass : #Object,
@@ -6,8 +24,8 @@ Class {
 		'watcher',
 		'semaphoreIndex',
 		'process',
-		'subscribers',
-		'watching'
+		'watching',
+		'announcer'
 	],
 	#category : #'GToolkit-Filewatcher-Core'
 }
@@ -34,7 +52,7 @@ GtFileWatcherEventLoop class >> startUp: resuming [
 
 { #category : #accessing }
 GtFileWatcherEventLoop >> announcer [
-	^ GtFileWatcherAnnouncer new eventLoop: self.
+	^ announcer ifNil: [ announcer := GtFileWatcherAnnouncer new ]
 ]
 
 { #category : #initialization }
@@ -77,18 +95,12 @@ GtFileWatcherEventLoop >> initialize [
 	semaphore := Semaphore new.
 	semaphoreIndex := Smalltalk registerExternalObject: semaphore.
 	watcher := GtFileWatcher withSemaphore: semaphoreIndex.
-	subscribers := OrderedCollection new.
 	watching := OrderedCollection new
 ]
 
 { #category : #events }
 GtFileWatcherEventLoop >> isRunning [
 	^ process isNotNil
-]
-
-{ #category : #accessing }
-GtFileWatcherEventLoop >> onEvent: aBlock [
-	subscribers add: aBlock
 ]
 
 { #category : #initialization }
@@ -99,7 +111,7 @@ GtFileWatcherEventLoop >> pollEvent [
 	
 	"anEvent can be nil when the watcher is being garbage collected"
 	anEvent
-		ifNotNil: [ subscribers do: [ :aSubscriber | aSubscriber cull: anEvent ] ]
+		ifNotNil: [ announcer announce: (GtFileWatcherFileAnnouncement from: anEvent) ]
 ]
 
 { #category : #accessing }
@@ -128,7 +140,7 @@ GtFileWatcherEventLoop >> stopLoop [
 
 { #category : #initialization }
 GtFileWatcherEventLoop >> subscribers [
-	^ subscribers
+	^ self announcer subscriptions subscriptions
 ]
 
 { #category : #accessing }

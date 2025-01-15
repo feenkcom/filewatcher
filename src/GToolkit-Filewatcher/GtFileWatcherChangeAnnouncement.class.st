@@ -8,3 +8,8 @@ Class {
 GtFileWatcherChangeAnnouncement class >> dealsWith: anEvent [
 	^ false
 ]
+
+{ #category : #'as yet unclassified' }
+GtFileWatcherChangeAnnouncement >> isChange [
+	^ true
+]

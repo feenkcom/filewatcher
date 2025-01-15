@@ -14,17 +14,24 @@ GtFileWatcherEventLoopExamples >> announcerWithEvent [
 	| announcer announcerEvents |
 	announcer := self eventLoopAnnouncer.
 	announcerEvents := OrderedCollection new.
-	
-	announcer when: GtFileWatcherFileAnnouncement do: [:anEvent | announcerEvents add: anEvent].
-	
-	(Smalltalk imageDirectory / 'GtFileWatcherEventLoopExamples.txt') ensureCreateFile.
-	
+
+	announcer
+		when: GtFileWatcherCreationAnnouncement
+		do: [  :anEvent |
+			"we get other event kinds here, so we filter"
+			anEvent isChange ifTrue: [ announcerEvents add: anEvent ] ].
+
+	(Smalltalk imageDirectory / 'GtFileWatcherEventLoopExamples.txt')
+		ensureCreateFile.
+
 	1 second wait.
-	
+
 	self assert: events size equals: 1.
 	self assert: announcerEvents size equals: 1.
-	self assert: announcerEvents first paths first equals: (Smalltalk imageDirectory / 'GtFileWatcherEventLoopExamples.txt') pathString.
-	
+	self
+		assert: announcerEvents first paths first
+		equals: (Smalltalk imageDirectory / 'GtFileWatcherEventLoopExamples.txt') pathString.
+
 	^ announcer
 ]
 
@@ -33,7 +40,8 @@ GtFileWatcherEventLoopExamples >> cleanUp [
 	toCleanup stopLoop.
 	toCleanup := nil.
 	(Smalltalk imageDirectory / 'GtFileWatcherEventLoopExamples.txt')
-		ensureDelete
+		ensureDelete.
+	events := OrderedCollection new
 ]
 
 { #category : #accessing }
@@ -43,7 +51,7 @@ GtFileWatcherEventLoopExamples >> eventLoopAnnouncer [
 	eventLoop := self startedEventLoop.
 	announcer := eventLoop announcer.
 	
-	self assert: announcer hasSubscriptions not.
+	self assert: announcer hasSubscriptions.
 	
 	^ announcer
 ]
@@ -71,10 +79,9 @@ GtFileWatcherEventLoopExamples >> eventLoopWithSubscriber [
 
 	events := OrderedCollection new.
 
-	eventLoop
-		onEvent: [ :anEvent | 
-			self assert: anEvent kind isCreate.
-			events add: anEvent ].
+	eventLoop announcer
+		when: GtFileWatcherCreationAnnouncement
+		do: [ :anEvent | events add: anEvent ].
 
 	self assert: eventLoop subscribers size equals: 1.
 
