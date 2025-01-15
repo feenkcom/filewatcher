@@ -17,9 +17,9 @@ GtFileWatcherEventLoopExamples >> announcerWithEvent [
 
 	announcer
 		when: GtFileWatcherFileAnnouncement
-		do: [ :anEvent | 
+		do: [  :anEvent |
 			"we get other event kinds here, so we filter"
-			anEvent kind isCreate ifTrue: [ announcerEvents add: anEvent ] ].
+			anEvent isChange ifTrue: [ announcerEvents add: anEvent ] ].
 
 	(Smalltalk imageDirectory / 'GtFileWatcherEventLoopExamples.txt')
 		ensureCreateFile.
