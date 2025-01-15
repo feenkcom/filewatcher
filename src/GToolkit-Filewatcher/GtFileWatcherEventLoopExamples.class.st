@@ -14,17 +14,24 @@ GtFileWatcherEventLoopExamples >> announcerWithEvent [
 	| announcer announcerEvents |
 	announcer := self eventLoopAnnouncer.
 	announcerEvents := OrderedCollection new.
-	
-	announcer when: GtFileWatcherFileAnnouncement do: [:anEvent | announcerEvents add: anEvent].
-	
-	(Smalltalk imageDirectory / 'GtFileWatcherEventLoopExamples.txt') ensureCreateFile.
-	
+
+	announcer
+		when: GtFileWatcherFileAnnouncement
+		do: [ :anEvent | 
+			"we get other event kinds here, so we filter"
+			anEvent kind isCreate ifTrue: [ announcerEvents add: anEvent ] ].
+
+	(Smalltalk imageDirectory / 'GtFileWatcherEventLoopExamples.txt')
+		ensureCreateFile.
+
 	1 second wait.
-	
+
 	self assert: events size equals: 1.
 	self assert: announcerEvents size equals: 1.
-	self assert: announcerEvents first paths first equals: (Smalltalk imageDirectory / 'GtFileWatcherEventLoopExamples.txt') pathString.
-	
+	self
+		assert: announcerEvents first paths first
+		equals: (Smalltalk imageDirectory / 'GtFileWatcherEventLoopExamples.txt') pathString.
+
 	^ announcer
 ]
 
