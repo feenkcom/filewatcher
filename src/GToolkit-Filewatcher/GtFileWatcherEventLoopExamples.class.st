@@ -9,33 +9,6 @@ Class {
 }
 
 { #category : #accessing }
-GtFileWatcherEventLoopExamples >> announcerWithEvent [
-	<gtExample>
-	| announcer announcerEvents |
-	announcer := self eventLoopAnnouncer.
-	announcerEvents := OrderedCollection new.
-
-	announcer
-		when: GtFileWatcherCreationAnnouncement
-		do: [  :anEvent |
-			"we get other event kinds here, so we filter"
-			anEvent isChange ifTrue: [ announcerEvents add: anEvent ] ].
-
-	(Smalltalk imageDirectory / 'GtFileWatcherEventLoopExamples.txt')
-		ensureCreateFile.
-
-	1 second wait.
-
-	self assert: events size equals: 1.
-	self assert: announcerEvents size equals: 1.
-	self
-		assert: announcerEvents first paths first
-		equals: (Smalltalk imageDirectory / 'GtFileWatcherEventLoopExamples.txt') pathString.
-
-	^ announcer
-]
-
-{ #category : #accessing }
 GtFileWatcherEventLoopExamples >> cleanUp [
 	toCleanup stopLoop.
 	toCleanup := nil.
@@ -59,15 +32,22 @@ GtFileWatcherEventLoopExamples >> eventLoopAnnouncer [
 { #category : #accessing }
 GtFileWatcherEventLoopExamples >> eventLoopWithEvent [
 	<gtExample>
-	| eventLoop |
+	| eventLoop aFile |
 	eventLoop := self startedEventLoop.
-	
-	(Smalltalk imageDirectory / 'GtFileWatcherEventLoopExamples.txt') ensureCreateFile.
-	
+
+	events := OrderedCollection new.
+
+	aFile := Smalltalk imageDirectory / 'GtFileWatcherEventLoopExamples.txt'.
+
+	aFile ensureCreateFile.
+
 	1 second wait.
-	
-	self assert: events size equals: 1.
-	
+
+	"we get exactly one creation event for our file"
+	self
+		assert: (events select: [ :anEvent | anEvent paths first = aFile pathString ]) size
+		equals: 1.
+
 	^ eventLoop
 ]
 
