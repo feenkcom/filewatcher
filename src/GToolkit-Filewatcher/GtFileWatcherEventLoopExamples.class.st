@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'events',
-		'toCleanup'
+		'toCleanup',
+		'watchedDirectory'
 	],
 	#category : #'GToolkit-Filewatcher-Examples'
 }
@@ -12,8 +13,7 @@ Class {
 GtFileWatcherEventLoopExamples >> cleanUp [
 	toCleanup stopLoop.
 	toCleanup := nil.
-	(Smalltalk imageDirectory / 'GtFileWatcherEventLoopExamples.txt')
-		ensureDelete.
+	watchedDirectory ifNotNil: #ensureDeleteAll.
 	events := OrderedCollection new
 ]
 
@@ -37,15 +37,17 @@ GtFileWatcherEventLoopExamples >> eventLoopWithEvent [
 
 	events := OrderedCollection new.
 
-	aFile := Smalltalk imageDirectory / 'GtFileWatcherEventLoopExamples.txt'.
+	aFile := self watchedDirectory / 'GtFileWatcherEventLoopExamples.txt'.
 
 	aFile ensureCreateFile.
 
 	1 second wait.
-
+	
 	"we get exactly one creation event for our file"
 	self
-		assert: (events select: [ :anEvent | anEvent paths first = aFile pathString ]) size
+		assert: (events
+				select: [ :anEvent | anEvent paths first = aFile pathString ])
+				size
 		equals: 1.
 
 	^ eventLoop
@@ -74,7 +76,7 @@ GtFileWatcherEventLoopExamples >> eventLoopWithSubscriberAndWatchedPath [
 	| eventLoop |
 	eventLoop := self eventLoopWithSubscriber.
 	
-	eventLoop watch: Smalltalk imageDirectory.
+	eventLoop watch: self watchedDirectory.
 	
 	self assert: eventLoop watchedPaths size equals: 1.
 	
@@ -119,4 +121,10 @@ GtFileWatcherEventLoopExamples >> stoppedEventLoop [
 	self assert: eventLoop isRunning not.
 	
 	^ eventLoop
+]
+
+{ #category : #accessing }
+GtFileWatcherEventLoopExamples >> watchedDirectory [
+	^ watchedDirectory
+		ifNil: [ watchedDirectory := (FileLocator imageDirectory / UUID new asString) createDirectory ]
 ]
