@@ -20,18 +20,20 @@ GtFileWatcherEventLoopExamples >> cleanUp [
 { #category : #accessing }
 GtFileWatcherEventLoopExamples >> eventLoopAnnouncer [
 	<gtExample>
+	<return: #GtFileWatcherAnnouncer>
 	| eventLoop announcer |
 	eventLoop := self startedEventLoop.
 	announcer := eventLoop announcer.
-	
+
 	self assert: announcer hasSubscriptions.
-	
+
 	^ announcer
 ]
 
 { #category : #accessing }
 GtFileWatcherEventLoopExamples >> eventLoopWithEvent [
 	<gtExample>
+	<return: #GtFileWatcherEventLoop>
 	| eventLoop aFile |
 	eventLoop := self startedEventLoop.
 
@@ -41,13 +43,9 @@ GtFileWatcherEventLoopExamples >> eventLoopWithEvent [
 
 	aFile ensureCreateFile.
 
-	1 second wait.
-	
-	"we get exactly one creation event for our file"
+	1 second wait.	"we get exactly one creation event for our file"
 	self
-		assert: (events
-				select: [ :anEvent | anEvent paths first = aFile pathString ])
-				size
+		assert: (events select: [ :anEvent | anEvent paths first = aFile pathString ]) size
 		equals: 1.
 
 	^ eventLoop
@@ -56,6 +54,7 @@ GtFileWatcherEventLoopExamples >> eventLoopWithEvent [
 { #category : #accessing }
 GtFileWatcherEventLoopExamples >> eventLoopWithSubscriber [
 	<gtExample>
+	<return: #GtFileWatcherEventLoop>
 	| eventLoop |
 	eventLoop := self simpleEventLoop.
 
@@ -73,13 +72,14 @@ GtFileWatcherEventLoopExamples >> eventLoopWithSubscriber [
 { #category : #accessing }
 GtFileWatcherEventLoopExamples >> eventLoopWithSubscriberAndWatchedPath [
 	<gtExample>
+	<return: #GtFileWatcherEventLoop>
 	| eventLoop |
 	eventLoop := self eventLoopWithSubscriber.
-	
+
 	eventLoop watch: self watchedDirectory.
-	
+
 	self assert: eventLoop watchedPaths size equals: 1.
-	
+
 	^ eventLoop
 ]
 
@@ -87,6 +87,7 @@ GtFileWatcherEventLoopExamples >> eventLoopWithSubscriberAndWatchedPath [
 GtFileWatcherEventLoopExamples >> simpleEventLoop [
 	<gtExample>
 	<after: #cleanUp>
+	<return: #GtFileWatcherEventLoop>
 	| eventLoop |
 	eventLoop := GtFileWatcherEventLoop new.
 	toCleanup := eventLoop.
@@ -100,26 +101,28 @@ GtFileWatcherEventLoopExamples >> simpleEventLoop [
 { #category : #accessing }
 GtFileWatcherEventLoopExamples >> startedEventLoop [
 	<gtExample>
+	<return: #GtFileWatcherEventLoop>
 	| eventLoop |
 	eventLoop := self eventLoopWithSubscriberAndWatchedPath.
-	
+
 	eventLoop startLoop.
-	
+
 	self assert: eventLoop isRunning.
-	
+
 	^ eventLoop
 ]
 
 { #category : #accessing }
 GtFileWatcherEventLoopExamples >> stoppedEventLoop [
 	<gtExample>
+	<return: #GtFileWatcherEventLoop>
 	| eventLoop |
 	eventLoop := self startedEventLoop.
-	
+
 	eventLoop stopLoop.
-	
+
 	self assert: eventLoop isRunning not.
-	
+
 	^ eventLoop
 ]
 

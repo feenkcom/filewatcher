@@ -7,5 +7,6 @@ Class {
 { #category : #accessing }
 GtFileWatcherExamples >> simpleFileWatcher [
 	<gtExample>
+	<return: #GtFileWatcher>
 	^ GtFileWatcher new
 ]
