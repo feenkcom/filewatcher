@@ -62,7 +62,8 @@ GtFileWatcherEventLoopExamples >> eventLoopWithSubscriber [
 
 	eventLoop announcer
 		when: GtFileWatcherCreationAnnouncement
-		do: [ :anEvent | events add: anEvent ].
+		do: [ :anEvent | events add: anEvent ]
+		for: self.
 
 	self assert: eventLoop subscribers size equals: 1.
 
