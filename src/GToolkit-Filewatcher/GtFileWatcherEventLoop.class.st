@@ -67,7 +67,8 @@ GtFileWatcherEventLoop >> assessWatchedFiles [
 { #category : #accessing }
 GtFileWatcherEventLoop >> finalize [
 	self stopLoop.
-	
+	Smalltalk unregisterExternalObject: semaphore.
+
 	super finalize
 ]
 
@@ -95,7 +96,8 @@ GtFileWatcherEventLoop >> initialize [
 	semaphore := Semaphore new.
 	semaphoreIndex := Smalltalk registerExternalObject: semaphore.
 	watcher := GtFileWatcher withSemaphore: semaphoreIndex.
-	watching := OrderedCollection new
+	watching := OrderedCollection new.
+	self class finalizationRegistry add: self
 ]
 
 { #category : #events }
