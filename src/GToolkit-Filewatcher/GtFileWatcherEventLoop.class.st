@@ -154,7 +154,19 @@ GtFileWatcherEventLoop >> summaryAttributes [
 
 { #category : #initialization }
 GtFileWatcherEventLoop >> watch: aPath [
+		"note: this watches a path based on its inode, meaning a deletion of the inode will lead to the event stream stopping.
+		
+		It is incompatible with watching specific files by name. This means that `#watch:` and `#watchFileName:` cannot be used together."
 	watcher watch: aPath pathString.
+	watching add: aPath
+]
+
+{ #category : #initialization }
+GtFileWatcherEventLoop >> watchFileName: aPath [
+		"note: this watches a file independent from its inode.
+		
+		It is incompatible with watching indiscriminately. This means that `#watch:` and `#watchFileName:` cannot be used together."
+	watcher watchFileName: aPath pathString.
 	watching add: aPath
 ]
 

@@ -73,6 +73,11 @@ GtFileWatcher >> primWatch: aGtBoxerString [
 ]
 
 { #category : #'private - ffi' }
+GtFileWatcher >> primWatchFileName: aGtBoxerString [
+	^ self ffiCall: #(void filewatcher_watcher_watch_filename(GtFileWatcher self, GtBoxerString aGtBoxerString))
+]
+
+{ #category : #'private - ffi' }
 GtFileWatcher >> unwatch: aString [
 	<return: #String>
 
@@ -84,4 +89,12 @@ GtFileWatcher >> watch: aString [
 	<return: #String>
 
 	self ffiLibrary newString: aString during: [ :aBoxerString | self primWatch: aBoxerString ]
+]
+
+{ #category : #'private - ffi' }
+GtFileWatcher >> watchFileName: aString [
+	"note: this watches a file independent from its inode, but is also incompatible with watching indiscriminately"
+	<return: #String>
+
+	self ffiLibrary newString: aString during: [ :aBoxerString | self primWatchFileName: aBoxerString ]
 ]
