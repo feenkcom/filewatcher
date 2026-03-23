@@ -1,8 +1,8 @@
 Class {
 	#name : #GtFileWatcherLibrary,
 	#superclass : #FFILibrary,
-	#traits : 'TGtWithStringBox + TGtWithPhlowRust',
-	#classTraits : 'TGtWithStringBox classTrait + TGtWithPhlowRust classTrait',
+	#traits : 'TGtWithStringBox',
+	#classTraits : 'TGtWithStringBox classTrait',
 	#category : #'GToolkit-Filewatcher-FFI'
 }
 
