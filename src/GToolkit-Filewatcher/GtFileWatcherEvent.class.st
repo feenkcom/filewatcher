@@ -78,7 +78,7 @@ GtFileWatcherEvent >> primKind [
 
 { #category : #'private - ffi' }
 GtFileWatcherEvent >> primPathAt: anIndex withString: aBoxerString [
-	self ffiCall: #(void filewatcher_event_path_at(self, GtBoxerString aBoxerString, int anIndex))
+	self ffiCall: #(void filewatcher_event_path_at(self, GtStringBox aBoxerString, int anIndex))
 ]
 
 { #category : #'private - ffi' }

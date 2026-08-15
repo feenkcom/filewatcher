@@ -64,17 +64,17 @@ GtFileWatcher >> primPoll [
 
 { #category : #'private - ffi' }
 GtFileWatcher >> primUnwatch: aGtBoxerString [
-	^ self ffiCall: #(void filewatcher_watcher_unwatch(GtFileWatcher self, GtBoxerString aGtBoxerString))
+	^ self ffiCall: #(void filewatcher_watcher_unwatch(GtFileWatcher self, GtStringBox aGtBoxerString))
 ]
 
 { #category : #'private - ffi' }
 GtFileWatcher >> primWatch: aGtBoxerString [
-	^ self ffiCall: #(void filewatcher_watcher_watch(GtFileWatcher self, GtBoxerString aGtBoxerString))
+	^ self ffiCall: #(void filewatcher_watcher_watch(GtFileWatcher self, GtStringBox aGtBoxerString))
 ]
 
 { #category : #'private - ffi' }
 GtFileWatcher >> primWatchFileName: aGtBoxerString [
-	^ self ffiCall: #(void filewatcher_watcher_watch_filename(GtFileWatcher self, GtBoxerString aGtBoxerString))
+	^ self ffiCall: #(void filewatcher_watcher_watch_filename(GtFileWatcher self, GtStringBox aGtBoxerString))
 ]
 
 { #category : #'private - ffi' }
