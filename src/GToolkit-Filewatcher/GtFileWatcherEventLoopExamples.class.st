@@ -13,7 +13,7 @@ Class {
 GtFileWatcherEventLoopExamples >> cleanUp [
 	toCleanup stopLoop.
 	toCleanup := nil.
-	watchedDirectory ifNotNil: #ensureDeleteAll.
+	watchedDirectory ifNotNil: [ :v | v ensureDeleteAll ].
 	events := OrderedCollection new
 ]
 
